@@ -3,7 +3,7 @@ Very basic, unofficial docker image for [purpurmc](https://purpurmc.org/).
 
 ## Usage Example
 ```
-docker run -v "/host/purpur:/purpur" -e EULA=true -e UPDATE=true -e MEMORY=2G todo
+docker run -v "/host/purpur:/opt/purpur" -e EULA=true -e UPDATE=true -e MEMORY=2G ghcr.io/n0r1uno/purpurmc-docker
 ```
 - default version is 1.18.2
 - `EULA=true` is required
@@ -23,7 +23,7 @@ docker run -v "/host/purpur:/purpur" -e EULA=true -e UPDATE=true -e MEMORY=2G to
 
 services:
   purpurmc-1-18-2:
-    image: todo
+    image: ghcr.io/n0r1uno/purpurmc-docker
     environment:
       - EULA=true
       - GID=1003
