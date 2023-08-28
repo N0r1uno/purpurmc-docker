@@ -8,6 +8,7 @@ docker run -v "/host/purpur:/opt/purpur" -e EULA=true -e UPDATE=true -e MEMORY=2
 - default version is 1.20.1
 - `EULA=true` is required
 - `UPDATE=true` always downloads the latest purpurmc build on startup
+- add custom server arguments with `ARGS="..."`
 - mount `/opt/purpur` to persist data
 - mount `/ramdisk` to use ramdisk mode (see below)
 - root user not recommended (see below)
@@ -29,7 +30,7 @@ If you've got a fast SSD, you probably won't notice any difference.
 
 To create a 4GB ramdisk run the following commands as root (or with sudo) on your host system.
 1. `mkdir -p /ramdisk`
-2. `mount -t tmpfs -o size=4G tmpfs /ramdisk`
+2. `mount -t tmpfs -o size=4G tmpfs /ramdisk` \
 For more information (e.g. auto-mount on system startup) see [ArchWiki](https://wiki.archlinux.org/title/Tmpfs#tmp.mount)
 
 ## Example docker-compose
@@ -40,8 +41,8 @@ services:
     container_name: purpurmc
     environment:
       - EULA=true
-      - GID=1001
-      - UID=1001
+      - GID=1001 # unprivileged user
+      - UID=1001 # unprivileged user
       - VERSION=1.20.1
       - UPDATE=true
       - MEMORY=4G
