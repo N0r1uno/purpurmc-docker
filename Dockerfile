@@ -1,7 +1,8 @@
-FROM debian:bullseye-slim
+FROM eclipse-temurin:19-jre
 WORKDIR /opt/
-RUN apt-get update && apt-get install -y openjdk-17-jre-headless wget && apt-get clean
-COPY setup.sh /opt/
-ENV MEMORY=1G
-ENV VERSION=1.18.2
-ENTRYPOINT ["/bin/sh", "setup.sh"]
+ENV VERSION=1.20.1
+ENV MEMORY=2G
+ENV BACKUP=30m
+ENV INCUBATOR=true
+COPY setup.sh backup.sh /opt/
+ENTRYPOINT ["./setup.sh"]
