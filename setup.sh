@@ -1,16 +1,5 @@
 #!/bin/sh
 
-shutdown() {
-    if [ -d /ramdisk ]; then
-        sh /opt/backup.sh full
-    fi
-    exit 0
-}
-
-trap "shutdown" TERM
-trap "shutdown" INT
-trap "shutdown" QUIT
-
 mkdir -p /opt/purpur/
 cd /opt/purpur/
 
@@ -36,7 +25,7 @@ if [ -d /ramdisk ]; then
     cd /ramdisk
 fi
 
-PURPUR="java -server -Xms$MEMORY -Xmx$MEMORY"
+PURPUR="java -server -Xms$MEMORY -Xmx$MEMORY $ARGS"
 if [ "$INCUBATOR" = "true" ]; then
     PURPUR="$PURPUR --add-modules=jdk.incubator.vector"
 fi
@@ -65,5 +54,12 @@ if [ ! -z $UID ] || [ ! -z $GID ]; then
 fi
 
 echo "> starting purpurmc server v$VERSION ..."
-$PURPUR
-shutdown
+if [ -d /ramdisk ]; then
+    trap 'kill "${child_pid}"; wait "${child_pid}"' TERM INT
+    $PURPUR &
+    child_pid="$!"
+    wait "$child_pid"
+    sh /opt/backup.sh full
+else
+    exec $PURPUR
+fi
