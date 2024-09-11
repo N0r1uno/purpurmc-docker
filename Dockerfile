@@ -1,8 +1,7 @@
-FROM eclipse-temurin:19-jre
+FROM eclipse-temurin:21-jre
 WORKDIR /opt/
-ENV VERSION=1.20.1
-ENV MEMORY=2G
-ENV BACKUP=30m
+ENV VERSION=1.21.1
+ENV MEMORY=4G
 ENV INCUBATOR=true
-COPY setup.sh backup.sh /opt/
+COPY setup.sh /opt/
 ENTRYPOINT ["./setup.sh"]

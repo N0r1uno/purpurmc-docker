@@ -14,17 +14,6 @@ if [ "$EULA" = "true" ]; then
     echo "eula=true" > eula.txt
 fi
 
-if [ -d /ramdisk ]; then 
-    echo "> initializing ramdisk..."
-    rm -rf /ramdisk/*
-    cp -r /opt/purpur/* /ramdisk
-    sh -c "while true; 
-        do sleep ${BACKUP}
-        sh /opt/backup.sh
-    done" &
-    cd /ramdisk
-fi
-
 PURPUR="java -server -Xms$MEMORY -Xmx$MEMORY $ARGS"
 if [ "$INCUBATOR" = "true" ]; then
     PURPUR="$PURPUR --add-modules=jdk.incubator.vector"
@@ -54,12 +43,4 @@ if [ ! -z $UID ] || [ ! -z $GID ]; then
 fi
 
 echo "> starting purpurmc server v$VERSION ..."
-if [ -d /ramdisk ]; then
-    trap 'kill "${child_pid}"; wait "${child_pid}"' TERM INT
-    $PURPUR &
-    child_pid="$!"
-    wait "$child_pid"
-    sh /opt/backup.sh full
-else
-    exec $PURPUR
-fi
+exec $PURPUR
